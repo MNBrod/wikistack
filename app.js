@@ -10,7 +10,7 @@ var path = require('path');
 var routes = require('./routes');
 
 
-models.db.sync({ force: true })
+models.db.sync({ force: false })
   .then(() => {
     app.listen(1337, function () {
       console.log('listening on port 1337!');

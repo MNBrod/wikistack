@@ -24,10 +24,15 @@ var Page = db.define('page', {
     defaultValue: Sequelize.NOW
   }
 }, {
-  getterMethods: {
-    route: () => '/wiki/' + this.urlTitle
-  }
+    getterMethods: {
+      route: () => {return '/wiki/' + this.urlTitle}
+    }
+  });
+
+Page.hook('beforeValidate', function (page) {
+  page.urlTitle = noSpace(page.title);
 })
+
 var User = db.define('user', {
   name: {
     type: Sequelize.STRING,
@@ -42,8 +47,19 @@ var User = db.define('user', {
   }
 })
 
+Page.belongsTo(User, { as: 'author' });
+
+
 module.exports = {
   db: db,
   Page: Page,
   User: User
 };
+var noSpace = function (str) {
+  if (str) {
+    var arr = str.split(' ');
+    return arr.join('_');
+  } else {
+    return Math.random().toString(36).substring(2, 7);
+  }
+}
