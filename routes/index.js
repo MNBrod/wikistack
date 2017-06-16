@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var wikiRouter = require('./wiki');
+var userRouter = require('./user');
 
-module.exports = function func () {
+  router.use('/wiki', wikiRouter);
+  router.use('/user', userRouter);
+  console.log("index routes");
 
-  //router.get('/', ())
-
-
-}
+module.exports = router;

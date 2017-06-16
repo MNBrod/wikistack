@@ -25,7 +25,7 @@ var Page = db.define('page', {
   }
 }, {
   getterMethods: {
-    routes: () => {return '/wiki/' + this.urlTitle}
+    route: () => '/wiki/' + this.urlTitle
   }
 })
 var User = db.define('user', {
