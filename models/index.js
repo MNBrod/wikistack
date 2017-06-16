@@ -25,7 +25,7 @@ var Page = db.define('page', {
   }
 }, {
     getterMethods: {
-      route: () => {return '/wiki/' + this.urlTitle}
+      route: function () { return '/wiki/' + this.getDataValue('urlTitle') }
     }
   });
 
@@ -55,6 +55,7 @@ module.exports = {
   Page: Page,
   User: User
 };
+
 var noSpace = function (str) {
   if (str) {
     var arr = str.split(' ');

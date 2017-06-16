@@ -58,7 +58,8 @@ router.get('/:urlTitle', function (req, res, next) {
     .then(function (foundPage) {
       //res.json(foundPage);
       res.render('wikipage', {
-        title: foundPage.title,
+        titles: foundPage.title,
+        author: foundPage.name,
         content: foundPage.content,
         url: foundPage.urlTitle
       });
