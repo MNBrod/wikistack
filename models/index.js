@@ -22,12 +22,16 @@ var Page = db.define('page', {
   date: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW
+  },
+  tags: {
+    type: Sequelize.ARRAY(Sequelize.STRING)
   }
 }, {
     getterMethods: {
       route: function () { return '/wiki/' + this.getDataValue('urlTitle') }
     }
-  });
+  }
+);
 
 Page.hook('beforeValidate', function (page) {
   page.urlTitle = noSpace(page.title);

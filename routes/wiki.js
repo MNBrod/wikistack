@@ -28,7 +28,8 @@ router.post('/', function (req, res, next) {
 
       var page = Page.build({
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        tags: req.body.tags.split(" ")
       });
 
       return page.save().then(function (page) {
@@ -48,21 +49,44 @@ router.get('/add', function (req, res, next) {
   //res.send('got to GET /wiki/add');
 });
 
+router.get('/search', function (req, res, next){
+  Page.findAll({
+    where: {
+      tags: {
+            $overlap: req.query.tags.split(' ')
+        }
+    }
+  })
+  .then(function (pages) {
+    console.log(pages);
+    res.render('index', {pages: pages});
+  })
+})
+
 router.get('/:urlTitle', function (req, res, next) {
   // res.send(req.params.urlTitle);
   Page.findOne({
     where: {
       urlTitle: req.params.urlTitle
-    }
+    },
+    include: [
+      { model: User, as: 'author' }
+    ]
   })
     .then(function (foundPage) {
-      //res.json(foundPage);
-      res.render('wikipage', {
-        titles: foundPage.title,
-        author: foundPage.name,
-        content: foundPage.content,
-        url: foundPage.urlTitle
-      });
+      if (foundPage === null) {
+        res.status(404).send();
+      } else {
+        console.log(foundPage);
+        res.render('wikipage', {
+          // titles: foundPage.title,
+          // author: foundPage.name,
+          // content: foundPage.content,
+          // url: foundPage.urlTitle
+          page: foundPage
+          //tags: foundPage.tags.join(" ")
+        });
+      }
     })
     .catch(next);
 });
